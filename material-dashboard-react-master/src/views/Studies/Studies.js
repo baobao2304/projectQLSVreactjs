@@ -158,6 +158,78 @@ const rowss = [
     diemrr: 120,
     edit: 44,
   },
+  {
+    mssv: '201239612',
+    hoten: 'Phạm Nguyễn Thanh Ngân',
+    xemdiem: 11,
+    xemcongno: 11,
+    xemlichhoc: 11,
+    diemrr: 120,
+    edit: 11,
+  },
+  {
+    mssv: '201276312',
+    hoten: 'Phạm Nguyễn  Ngân',
+    xemdiem: 22,
+    xemcongno: 22,
+    xemlichhoc: 22,
+    diemrr: 120,
+    edit: 22,
+  },
+  {
+    mssv: '201243312',
+    hoten: 'Phạm  Thanh Ngân',
+    xemdiem: 33,
+    xemcongno: 33,
+    xemlichhoc: 33,
+    diemrr: 120,
+    edit: 33,
+  },
+  {
+    mssv: '20125312',
+    hoten: ' Nguyễn Thanh Ngân',
+    xemdiem: 44,
+    xemcongno: 44,
+    xemlichhoc: 44,
+    diemrr: 120,
+    edit: 44,
+  },
+  {
+    mssv: '201239612',
+    hoten: 'Phạm Nguyễn Thanh Ngân',
+    xemdiem: 11,
+    xemcongno: 11,
+    xemlichhoc: 11,
+    diemrr: 120,
+    edit: 11,
+  },
+  {
+    mssv: '201276312',
+    hoten: 'Phạm Nguyễn  Ngân',
+    xemdiem: 22,
+    xemcongno: 22,
+    xemlichhoc: 22,
+    diemrr: 120,
+    edit: 22,
+  },
+  {
+    mssv: '201243312',
+    hoten: 'Phạm  Thanh Ngân',
+    xemdiem: 33,
+    xemcongno: 33,
+    xemlichhoc: 33,
+    diemrr: 120,
+    edit: 33,
+  },
+  {
+    mssv: '20125312',
+    hoten: ' Nguyễn Thanh Ngân',
+    xemdiem: 44,
+    xemcongno: 44,
+    xemlichhoc: 44,
+    diemrr: 120,
+    edit: 44,
+  },
 ];
 const rows = [
   createData('11231243', 'Phạm  Lê ', 1, 1, 1, 1, 1),
@@ -226,6 +298,7 @@ export default function StudyPage() {
       }
     }
   }, [open]);
+
   const handleChangePage = (event, newPage) => {
     setPage(newPage);
   };
@@ -318,6 +391,7 @@ export default function StudyPage() {
                 className="btn-container"
                 variant="contained"
                 color="primary"
+                id="handleClickOpen('paper')"
                 onClick={handleClickOpen('paper')}
               >
                 Add New Study
