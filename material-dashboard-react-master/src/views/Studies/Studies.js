@@ -1,12 +1,12 @@
 import React from 'react';
-// import '../Assets/Css/Style.css';
-import {
-  // BrowserRouter as Router,
-  // Switch,
-  // Route,
-  // useRouteMatch,
-  useHistory,
-} from 'react-router-dom';
+// import '';
+// import {
+//   // BrowserRouter as Router,
+//   // Switch,
+//   // Route,
+//   // useRouteMatch,
+//   useHistory,
+// } from 'react-router-dom';
 import { makeStyles } from '@material-ui/core/styles';
 import CssBaseline from '@material-ui/core/CssBaseline';
 import Typography from '@material-ui/core/Typography';
@@ -260,6 +260,20 @@ const useStyles = makeStyles(theme => ({
   textField: {
     width: '25ch',
   },
+  btn_container: {
+    margin: '30px',
+    background: 'linear-gradient(45deg, #FE6B8B 30%, #FF8E53 90%)',
+  },
+  table_container: {
+    color: 'white',
+    padding: '20px',
+    fontSize: '30px',
+    fontWeight: 'bold',
+    // width: '100%',
+    // margin: '20px',
+    textAlign: 'center',
+    background: 'linear-gradient(45deg, #FE6B8B 30%, #FF8E53 90%)',
+  },
 }));
 function handleClick(event) {
   event.preventDefault();
@@ -268,11 +282,13 @@ function handleClick(event) {
 
 export default function StudyPage() {
   const classes = useStyles();
-  let history = useHistory();
+  // let history = useHistory();
   const [page, setPage] = React.useState(0);
   const [rowsPerPage, setRowsPerPage] = React.useState(10);
   const [open, setOpen] = React.useState(false);
   const [scroll, setScroll] = React.useState('paper');
+  const [openEditStudy, setOpenEditStudy] = React.useState(false);
+  const [scrollEditStudy, setScrollEditStudy] = React.useState('paper');
 
   const handleClickOpen = scrollType => () => {
     setOpen(true);
@@ -281,6 +297,15 @@ export default function StudyPage() {
 
   const handleClose = () => {
     setOpen(false);
+  };
+
+  const handleClickOpenEditStudy = scrollType => () => {
+    setOpenEditStudy(true);
+    setScrollEditStudy(scrollType);
+  };
+
+  const handleCloseEditStudy = () => {
+    setOpenEditStudy(false);
   };
   const [selectedDate, setSelectedDate] = React.useState(
     new Date('1999-08-18T21:11:54')
@@ -307,38 +332,11 @@ export default function StudyPage() {
     setRowsPerPage(+event.target.value);
     setPage(0);
   };
-  function handleClickRedirectPoint(event) {
-    event.preventDefault();
-    var clickedId = event.target.id;
-    console.info('You clicked a breadcrumb.' + clickedId);
-    return history.push('/admin/study/point/' + clickedId);
-  }
-  function handleClickRedirectDebtDetail(event) {
-    event.preventDefault();
-    var clickedId = event.target.id;
-    console.info('You clicked a breadcrumb.' + clickedId);
-    return history.push('/admin/study/congno/' + clickedId);
-  }
-  function handleClickRedirectScheduleStudy(event) {
-    event.preventDefault();
-    var clickedId = event.target.id;
-    console.info('You clicked a breadcrumb.' + clickedId);
-    return history.push('/admin/study/schedule/' + clickedId);
-  }
-  function handleClickRedirectDetail(event) {
-    event.preventDefault();
-    var clickedId = event.target.id;
-    console.info('You clicked a breadcrumb.' + clickedId);
-    return history.push('/admin/study/' + clickedId);
-  }
 
-  function handleClickRedirectPointPractiseStudy(event) {
-    event.preventDefault();
-    var clickedId = event.target.id;
-    console.info('You clicked a breadcrumb.' + clickedId);
-    return history.push('/admin/study/practise/' + clickedId);
-  }
   const [values, setValues] = React.useState({
+    firstname: '',
+    lastname: '',
+    studytype: '',
     amount: '',
     password: '',
     weight: '',
@@ -385,37 +383,44 @@ export default function StudyPage() {
             {/* <Button /> */}
           </Box>
           {/* table */}
+          {/* dialog edit study */}
           <div>
-            <div>
-              <Button
-                className="btn-container"
-                variant="contained"
-                color="primary"
-                id="handleClickOpen('paper')"
-                onClick={handleClickOpen('paper')}
-              >
-                Add New Study
-              </Button>
-            </div>
-
             <Dialog
-              open={open}
-              onClose={handleClose}
-              scroll={scroll}
+              open={openEditStudy}
+              onClose={handleCloseEditStudy}
+              scroll={scrollEditStudy}
               aria-labelledby="scroll-dialog-title"
               aria-describedby="scroll-dialog-description"
             >
-              <DialogTitle id="scroll-dialog-title">Add News Study</DialogTitle>
+              <DialogTitle
+                id="scroll-dialog-title"
+                className={classes.table_container}
+              >
+                Edit Study
+              </DialogTitle>
               <DialogContent dividers={scroll === 'paper'}>
                 <div>
                   <FormControl fullWidth className={classes.margin}>
                     <InputLabel htmlFor="standard-adornment-amount">
-                      Họ Và Tên
+                      Họ Đệm
                     </InputLabel>
                     <Input
                       id="standard-adornment-amount"
-                      value={values.amount}
-                      onChange={handleChange('amount')}
+                      value={values.firstname}
+                      onChange={handleChange('firstname')}
+                      // startAdornment={
+                      //   <InputAdornment position="start">$</InputAdornment>
+                      // }
+                    />
+                  </FormControl>
+                  <FormControl fullWidth className={classes.margin}>
+                    <InputLabel htmlFor="standard-adornment-amount">
+                      Tên
+                    </InputLabel>
+                    <Input
+                      id="standard-adornment-amount"
+                      value={values.lastname}
+                      onChange={handleChange('lastname')}
                       // startAdornment={
                       //   <InputAdornment position="start">$</InputAdornment>
                       // }
@@ -428,7 +433,7 @@ export default function StudyPage() {
                       format="MM/dd/yyyy"
                       margin="normal"
                       id="date-picker-inline"
-                      label="Date picker inline"
+                      label="Ngày Sinh"
                       value={selectedDate}
                       onChange={handleDateChange}
                       KeyboardButtonProps={{
@@ -436,10 +441,35 @@ export default function StudyPage() {
                       }}
                     />
                   </MuiPickersUtilsProvider>
-
+                  <FormControl fullWidth className={classes.margin}>
+                    <InputLabel htmlFor="standard-adornment-amount">
+                      Email
+                    </InputLabel>
+                    <Input
+                      id="standard-adornment-amount"
+                      value={values.lastname}
+                      onChange={handleChange('lastname')}
+                      // startAdornment={
+                      //   <InputAdornment position="start">$</InputAdornment>
+                      // }
+                    />
+                  </FormControl>
+                  <FormControl fullWidth className={classes.margin}>
+                    <InputLabel htmlFor="standard-adornment-amount">
+                      Study Type
+                    </InputLabel>
+                    <Input
+                      id="standard-adornment-amount"
+                      value={values.studytype}
+                      onChange={handleChange('studytype')}
+                      // startAdornment={
+                      //   <InputAdornment position="start">$</InputAdornment>
+                      // }
+                    />
+                  </FormControl>
                   <FormControl fullWidth className={classes.formControl}>
                     <InputLabel id="demo-simple-select-label">
-                      Niên Khóa
+                      Year in id
                     </InputLabel>
                     <Select
                       labelId="demo-simple-select-label"
@@ -530,6 +560,197 @@ export default function StudyPage() {
               </DialogActions>
             </Dialog>
           </div>
+
+          {/* dialog add new study */}
+          <div>
+            <div>
+              <Button
+                className={classes.btn_container}
+                variant="contained"
+                color="primary"
+                id="handleClickOpen('paper')"
+                onClick={handleClickOpen('paper')}
+              >
+                Add New Study
+              </Button>
+            </div>
+
+            <Dialog
+              open={open}
+              onClose={handleClose}
+              scroll={scroll}
+              aria-labelledby="scroll-dialog-title"
+              aria-describedby="scroll-dialog-description"
+            >
+              <DialogTitle
+                id="scroll-dialog-title"
+                className={classes.table_container}
+              >
+                Add News Study
+              </DialogTitle>
+              <DialogContent dividers={scroll === 'paper'}>
+                <div>
+                  <FormControl fullWidth className={classes.margin}>
+                    <InputLabel htmlFor="standard-adornment-amount">
+                      Họ Đệm
+                    </InputLabel>
+                    <Input
+                      id="standard-adornment-amount"
+                      value={values.firstname}
+                      onChange={handleChange('firstname')}
+                      // startAdornment={
+                      //   <InputAdornment position="start">$</InputAdornment>
+                      // }
+                    />
+                  </FormControl>
+                  <FormControl fullWidth className={classes.margin}>
+                    <InputLabel htmlFor="standard-adornment-amount">
+                      Tên
+                    </InputLabel>
+                    <Input
+                      id="standard-adornment-amount"
+                      value={values.lastname}
+                      onChange={handleChange('lastname')}
+                      // startAdornment={
+                      //   <InputAdornment position="start">$</InputAdornment>
+                      // }
+                    />
+                  </FormControl>
+                  <MuiPickersUtilsProvider utils={DateFnsUtils}>
+                    <KeyboardDatePicker
+                      disableToolbar
+                      variant="inline"
+                      format="MM/dd/yyyy"
+                      margin="normal"
+                      id="date-picker-inline"
+                      label="Ngày"
+                      value={selectedDate}
+                      onChange={handleDateChange}
+                      KeyboardButtonProps={{
+                        'aria-label': 'change date',
+                      }}
+                    />
+                  </MuiPickersUtilsProvider>
+                  <FormControl fullWidth className={classes.margin}>
+                    <InputLabel htmlFor="standard-adornment-amount">
+                      Email
+                    </InputLabel>
+                    <Input
+                      id="standard-adornment-amount"
+                      value={values.lastname}
+                      onChange={handleChange('lastname')}
+                      // startAdornment={
+                      //   <InputAdornment position="start">$</InputAdornment>
+                      // }
+                    />
+                  </FormControl>
+                  <FormControl fullWidth className={classes.margin}>
+                    <InputLabel htmlFor="standard-adornment-amount">
+                      Study Type
+                    </InputLabel>
+                    <Input
+                      id="standard-adornment-amount"
+                      value={values.studytype}
+                      onChange={handleChange('studytype')}
+                      // startAdornment={
+                      //   <InputAdornment position="start">$</InputAdornment>
+                      // }
+                    />
+                  </FormControl>
+                  <FormControl fullWidth className={classes.formControl}>
+                    <InputLabel id="demo-simple-select-label">
+                      Year in id
+                    </InputLabel>
+                    <Select
+                      labelId="demo-simple-select-label"
+                      id="demo-simple-select"
+                      onChange={handleChange}
+                    >
+                      <MenuItem value={10}>2016</MenuItem>
+                      <MenuItem value={20}>2017</MenuItem>
+                      <MenuItem value={30}>2018</MenuItem>
+                      <MenuItem value={10}>2019</MenuItem>
+                      <MenuItem value={10}>2020</MenuItem>
+                      <MenuItem value={10}>2021</MenuItem>
+                    </Select>
+                  </FormControl>
+
+                  <FormControl fullWidth className={classes.formControl}>
+                    <InputLabel id="demo-simple-select-label">Ngành</InputLabel>
+                    <Select
+                      labelId="demo-simple-select-label"
+                      id="demo-simple-select"
+                      onChange={handleChange}
+                    >
+                      <MenuItem value={10}>Công nghệ thông tin</MenuItem>
+                      <MenuItem value={20}>Công nghệ thực phẩm</MenuItem>
+                    </Select>
+                  </FormControl>
+                  <FormControl fullWidth className={classes.formControl}>
+                    <InputLabel id="demo-simple-select-label">
+                      Chuyên Ngành
+                    </InputLabel>
+                    <Select
+                      labelId="demo-simple-select-label"
+                      id="demo-simple-select"
+                      onChange={handleChange}
+                    >
+                      <MenuItem value={10}>Công nghệ Phần Mềm</MenuItem>
+                      <MenuItem value={20}>Hệ Thống Thông Tin</MenuItem>
+                      <MenuItem value={10}>Mạng Máy Tính</MenuItem>
+                      <MenuItem value={20}>Thương Mại Điện Tử</MenuItem>
+                      <MenuItem value={10}>Khoa Học Máy Tính</MenuItem>
+                    </Select>
+                  </FormControl>
+                  <FormControl fullWidth className={classes.formControl}>
+                    <InputLabel id="demo-simple-select-label">Lớp</InputLabel>
+                    <Select
+                      labelId="demo-simple-select-label"
+                      id="demo-simple-select"
+                      onChange={handleChange}
+                    >
+                      <MenuItem value={10}>06DHTH1</MenuItem>
+                      <MenuItem value={20}>06DHTH2</MenuItem>
+                      <MenuItem value={10}>07DHTH1</MenuItem>
+                      <MenuItem value={20}>07DHTH2</MenuItem>
+                      <MenuItem value={10}>08DHTH1</MenuItem>
+                      <MenuItem value={20}>08DHTH2</MenuItem>
+                      <MenuItem value={10}>09DHTH1</MenuItem>
+                      <MenuItem value={20}>09DHTH2</MenuItem>
+                      <MenuItem value={10}>10DHTH1</MenuItem>
+                      <MenuItem value={20}>10DHTH2</MenuItem>
+                      <MenuItem value={10}>11DHTH1</MenuItem>
+                      <MenuItem value={20}>11DHTH2</MenuItem>
+                    </Select>
+                  </FormControl>
+                  <FormControl fullWidth className={classes.formControl}>
+                    <InputLabel id="demo-simple-select-label">
+                      Loại Hình Đào Tạo
+                    </InputLabel>
+                    <Select
+                      labelId="demo-simple-select-label"
+                      id="demo-simple-select"
+                      onChange={handleChange}
+                    >
+                      <MenuItem value={10}>Đại Học Chính Quy</MenuItem>
+                      <MenuItem value={20}>Cao Đẳng </MenuItem>
+                      <MenuItem value={10}>Đại Học Văn Bằng Hai</MenuItem>
+                      <MenuItem value={20}>Thạc Sĩ</MenuItem>
+                    </Select>
+                  </FormControl>
+                </div>
+              </DialogContent>
+              <DialogActions>
+                <Button onClick={handleClose} color="primary">
+                  Cancel
+                </Button>
+                <Button onClick={handleClose} color="primary">
+                  Subscribe
+                </Button>
+              </DialogActions>
+            </Dialog>
+          </div>
+          <div className={classes.table_container}>Table Sinh Viên</div>
           <Paper className={classes.root}>
             <TableContainer className={classes.container}>
               <Table stickyHeader aria-label="sticky table">
@@ -583,7 +804,7 @@ export default function StudyPage() {
                           <TableCell
                             key={row.id}
                             align="center"
-                            onClick={handleClickRedirectPoint}
+                            // onClick={handleClickRedirectPoint}
                             id={row.xemdiem}
                           >
                             Xem Điểm
@@ -591,7 +812,7 @@ export default function StudyPage() {
                           <TableCell
                             key={row.id}
                             align="center"
-                            onClick={handleClickRedirectDebtDetail}
+                            // onClick={handleClickRedirectDebtDetail}
                             id={row.xemdiem}
                           >
                             Xem Công Nợ
@@ -599,7 +820,7 @@ export default function StudyPage() {
                           <TableCell
                             key={row.id}
                             align="center"
-                            onClick={handleClickRedirectScheduleStudy}
+                            // onClick={handleClickRedirectScheduleStudy}
                             id={row.xemlichhoc}
                           >
                             Xem Lịch Học
@@ -607,7 +828,7 @@ export default function StudyPage() {
                           <TableCell
                             key={row.id}
                             align="center"
-                            onClick={handleClickRedirectPointPractiseStudy}
+                            // onClick={handleClickRedirectPointPractiseStudy}
                             id={row.diemrr}
                           >
                             Xem Điểm Rèn Luyện
@@ -615,7 +836,7 @@ export default function StudyPage() {
                           <TableCell
                             key={rowss.id}
                             align="center"
-                            onClick={handleClickRedirectDetail}
+                            onClick={handleClickOpenEditStudy('paper')}
                             id={row.edit}
                           >
                             EDIT
